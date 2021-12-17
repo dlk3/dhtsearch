@@ -1,23 +1,22 @@
-# The DHTSerach web server in a container
+# The DHTSearch web server in a container
 
-This configuration is specific to my installation of the Alphareign components.  
-It will likely require some amount of reconfiguration in order to work in 
-someone else's environment.
+This configuration is specific to my installation of the Alphareign components.  It will likely require some amount of reconfiguration in order to work in someone else's environment.
 
 Modify data/www-php/index.js:
-+ set host and credentials for the alphareign database
++ set host and login credentials for the alphareign database
 
 Modify data/entrypoint.sh:
 + set host ip for elasticsearch server
 
 Ensure that the SSH keys are set up properly:
-+ use <code>ssh-keygen</code> to create a set of key files and put them into the <code>data/ssh_keys</code> directory.
++ use <code>ssh-keygen</code> to create a set of key files and put them into the <code>data/ssh-keys</code> directory.
 + put the public key from <code>data/ssh-keys/id-rsa.pub</code> into the <code>known_hosts</code> file on the elasticsearch server.
 + get the host key for the elasticsearch server from your workstation's <code>known_hosts</code> file and put it into <code>data/known_hosts</code>.
 
 See the comments surrounding the php-fpm ACL settings in the Dockerfile.  These steps are only needed when you are building a container that will run in Google's Cloud Run environment.  They will break php-fpm in other environments.  Comment them out if you're not running the container in Cloud Run.
 
 Building and testing:
+
     $ docker build -t dhtsearch .
     $ docker run --rm -p 8080:80 --name dhtsearch dhtsearch
     $ docker exec -it dhtsearch /bin/sh
