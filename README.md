@@ -4,7 +4,7 @@ The web site's configuration is heavily dependent on the way that the back-end d
 
 Install the code from this repository on your web server:
 + The content of the <code>www-php</code> directory is the web site content.
-++ To add the dependent PHP packages, run <code>composer install</code> from the directory where you put this content.
++ To add the dependent PHP packages, run <code>composer install</code> from the directory where you put this content.
 + The <code>dhtsearch.conf</code> file is an example virtualhost configuration for an Apache web server.
 
 Modify <code>index.php</code>:
