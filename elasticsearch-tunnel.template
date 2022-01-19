@@ -1,0 +1,16 @@
+#  This file contains the values required by the elasticsearch-tunnel systemd service.
+#
+#  This file should be located at /etc/sysconfig/elasticsearch-tunnel.
+
+#  The publicly accessable IP address for the server that houses the elasticsearch database
+PUBLIC_IP=9.0.0.0
+
+#  The private network IP address where the elasticsearch server listens for connections
+PRIVATE_IP=127.0.0.1
+
+#  The userid on the server that houses the elasticsearch database that we use for our SSH login
+USER=someuser
+
+#  The port on the private network IP address where the elasticsearch server listens for connections
+ES_PORT=9200
+

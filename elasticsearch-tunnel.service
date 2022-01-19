@@ -1,0 +1,10 @@
+[Unit]
+Description=SSH tunnel to DHTSearch elasticsearch server
+Wants=network-online.target
+After=network-online.target sshd.service
+
+[Service]
+Type=simple
+Restart=on-failure
+EnvironmentFile=/etc/sysconfig/elasticsearch-tunnel
+ExecStart=/usr/bin/autossh -M 20000 -4 -L ${ES_PORT}:${PRIVATE_IP}:${ES_PORT} -N ${USER}@${PUBLIC_IP}

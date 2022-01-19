@@ -1,4 +1,2 @@
-data/entrypoint.sh
-data/known_hosts
-data/ssh-keys/*
-data/www-php/index.php
+elasticsearch-tunnel
+www-php/index.php
