@@ -122,7 +122,7 @@ if(isset($queryDoc)){
 $results = $this->client->search($doc);
 $torrents = $results['hits']['hits'];
 try{
-	$this->view->total = number_format($results['hits']['total']);
+	$this->view->total = number_format($results['hits']['total']['value']);
 }
 catch(Exception $error){}
 

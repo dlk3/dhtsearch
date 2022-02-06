@@ -5,7 +5,7 @@
         "slim/flash": "^0.1.0",
         "dflydev/fig-cookies": "^1.0",
         "lcobucci/jwt": "^3.2",
-        "elasticsearch/elasticsearch": "^5.0",
+        "elasticsearch/elasticsearch": "^7.0",
         "slim/csrf": "^0.7.0"
     }
 }
