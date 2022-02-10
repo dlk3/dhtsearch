@@ -104,7 +104,7 @@ if(isset($torrents) && is_array($torrents) && count($torrents) > 0){
 			$torrent['length'] = 0;
 		}
 		if(isset($torrent['created'])){
-			$torrent['date'] = date("D, j M Y G:i:s", $torrent['created']);
+			$torrent['date'] = date("D, j M Y G:i:s", strtotime($torrent['created']));
 		}else{
 			$torrent['date'] = date("D, j M Y G:i:s", time());
 		}
