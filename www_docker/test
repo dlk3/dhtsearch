@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-
-docker rm www
-docker rmi www:latest
-docker build -t www:latest .
-docker run -it --rm --name www --network dhtsearch_default -p "80:80" -p "443:443" -v ./html:/var/www/html -v ./certs:/etc/letsencrypt/ -v ./conf/virtualhost.conf:/etc/httpd/conf.d/virtualhost.conf -v ./conf/ssl.conf:/etc/httpd/conf.d/ssl.conf www:latest /bin/sh
