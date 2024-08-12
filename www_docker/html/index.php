@@ -19,19 +19,20 @@ timer('start');
 session_start();
 
 define('ROOT', __DIR__);
-define('INVITE_ONLY', false);
+define('INVITE_ONLY', true);
 define('REQUEST_LOGIN', true);
 
-define('DBNAME', 'databasename');
-define('DBUSER', 'databaseuser');
-define('DBPASS', 'databasepass');
+define('DBNAME', 'alphareign');
+define('DBUSER', 'root');
+define('DBPASS', 'passw0rd');
+define('DBHOST', 'mariadb');
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/lib/rb.php';
 
 timer('autoload done');
 
-R::setup('mysql:host=localhost;dbname='.DBNAME, DBUSER, DBPASS);
+R::setup('mysql:host='.DBHOST.';dbname='.DBNAME, DBUSER, DBPASS);
 
 timer('db connection init done');
 

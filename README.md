@@ -1,15 +1,38 @@
-# The DHTSearch web site code
+# DHTSearch 
 
-The web site's configuration is heavily dependent on the way that the back-end database servers are set up.  What I describe here is based on my personal configuration.  Everyone else's configuration will probably be different.  Figuring out the necessary adjustments is left as an exercise for the user.
+DHTSearch is a scraper that indexes all of the active torrents in the [BitTorrent DHT network](https://www.bittorrent.org/beps/bep_0005.html) that it can find and makes that index available for searching.
 
-Install the code from this repository on your web server:
-+ The content of the <code>www-php</code> directory is the web site content.
-+ To add the dependent PHP packages, run <code>composer install</code> from the directory where you put this content.
-+ The <code>dhtsearch.conf</code> file is an example virtualhost configuration for an Apache web server.
+Based on the [AlphaReign project](https://github.com/AlphaReign) by [William Prefinem](https://prefinem.com), this project contains the tweaks I have made to AlphaReign, but its real purpose has been to "containerize" the application in Docker.  I did this to make it easier for me to relocate this application into different hosting environments.
 
-Modify <code>index.php</code>:
-+ set host and login credentials for the alphareign database
+### The Docker containers
 
-Establish an SSH tunnel between the web server and the back-end elasticsearch server.
-+ Manually set up a SSH login for the web server's root user to some user on the elasticsearch server using SSH keys.
-+ The <code>elasticsearch-tunnel.service</code> file, along with the accompanying <code>elasticsearch-tunnel.template</code> configuration file,  is an example of a systemd service script that uses the autossh program to automatically start the tunnel at boot and to keep it alive over time.
+- **scraper:** The Alphareign DHT nodejs code runs here.  There are three nodejs apps: scraper, loader and cleaner.  
+
+   The *scraper* app finds torrents in the DHT cloud and updates a mariadb table with information about them.  
+
+   The *loader* app reads torrents (rows) from the mariadb table, gets the tracker information for each torrent and updates documents for each torrent in elasticsearch. 
+
+   The *cleaner* app is used to keep the databases down to a reasonable size.  It does this by querying the mariadb database for torrents that have not been seen in the DHT cloud for a specified period of time and deleting them from the elasticsearch and mariadb databases.
+
+- **www:** The web site portion of the Alphareign project runs here.  This is a PHP web site that allows people to perform searches on the torrent documents contained in elasticsearch.
+
+- **mariadb:** The mariadb database.
+
+- **elasticsearch:** The elasticsearch database.
+
+### Configuration
+
+#### scraper Container
+
+The `alphareign_docker/conf/index.js` file configures all three of the of the nodejs apps that run within this container.  This file should not need any changes during Docker deployment but is available for tweaking.
+
+#### www Container
+
+When you run the container for the first time be sure `define('INVITE_ONLY', false)` is set in `www_docker/html/index.php` so that you can register an ID for yourself.  In this mode anyone can register and use the web site.  If you later want to make the web site available by invitation only, then change this variable to true.
+
+The container needs to be configured to set the web site host name properly, in multiple locations.  SSL certificates need to be created for the web server and deployed.
+
+- Modify the ServerName entries in `www_docker/conf/virtualhosts.conf`.
+- Put the SSL certificates into the `www_docker/certs` directory as `fullchain.pem` and `privkey.pem`.  If that won't work, then adjust the `SSLCertificate*` settings in `www_docker/conf/virtualhosts.conf` and the www container's volume mappings in `docker-compose.yaml` accordingly.
+
+   Be sure to take certificate expiration and renewal into account.  I created an automated process that runs outside of docker to update the certs and restart the httpd server inside the www container when they were renewed.

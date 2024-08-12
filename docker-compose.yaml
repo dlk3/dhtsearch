@@ -1,0 +1,64 @@
+services:
+  scraper:
+    container_name: scraper
+    build: './alphareign_docker/'
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+      - elasticsearch
+    ports:
+      - "6881:6881"
+    volumes:
+      - type: bind
+        source: ./alphareign_docker/config/index.js
+        target: /scraper/config/index.js"
+
+  www:
+    container_name: www
+    build: './www_docker/'
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+      - elasticsearch
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - type: bind
+        source: ./www_docker/html/
+        target: /var/www/html/
+      - type: bind
+        source: ./www_docker/certs/
+        target: /etc/letsencrypt/
+      - type: bind
+        source: ./www_docker/conf/virtualhost.conf
+        target: /etc/httpd/conf.d/virtualhost.conf
+      - type: bind
+        source: ./www_docker/conf/ssl.conf
+        target: /etc/httpd/conf.d/ssl.conf
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: passw0rd
+      MARIADB_DATABASE: alphareign
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.16.2
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: false
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+volumes:
+  mysqldata:
+    driver: local
+  elasticsearch:
+    driver: local
