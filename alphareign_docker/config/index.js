@@ -48,7 +48,7 @@ const config = {
 		// Seconds between every bulk insert
 		frequency: 10,
 		// Amount of torrents to update in elasticsearch at once
-		limit: 100,
+		limit: 1000,
 	},
 	stale: {
 		// Delete outdated torrents after this many days
@@ -65,24 +65,7 @@ const config = {
 		limit: 50,
 		// host: 'udp://tr4ck3r.duckdns.org:6969/announce',
 		host: 'udp://tracker.opentrackr.org:1337/announce',
-		// host: 'udp://p4p.arenabg.com:1337/announce',
-		// host: 'udp://explodie.org:6969/announce',
 		// host: 'udp://open.stealth.si:80/announce',
-		// host: 'udp://tracker.moeking.me:6969/announce',
-		// host: 'udp://retracker01-msk-virt.corbina.net:80/announce',
-		// host: 'udp://tracker.leech.ie:1337/announce',
-		// host: 'udp://tracker.ccp.ovh:6969/announce',
-		// host: 'udp://tracker.bitsearch.to:1337/announce',
-		// host: 'udp://thouvenin.cloud:6969/announce',
-		// host: 'udp://aarsen.me:6969/announce',
-		// host: 'udp://epider.me:6969/announce',
-		// host: 'udp://sanincode.com:6969/announce',
-		// host: 'udp://htz3.noho.st:6969/announce',
-		// host: 'udp://uploads.gamecoast.net:6969/announce',
-		// host: 'udp://v1046920.hosted-by-vdsina.ru:6969/announce',
-		// host: 'udp://acxx.de:6969/announce',
-		// host: 'udp://private.anonseed.com:6969/announce',
-		// host: 'udp://opentracker.io:6969/announce',
 	},
 };
 

@@ -9,8 +9,8 @@ if [ "$CONTAINER" == "" ] || [ "$CONTAINER" == "-H" ] || [ "$CONTAINER" == "--HE
     exit
 fi
 
-docker compose down "$1"
-docker compose rm "$1"
+podman compose down "$1"
+podman compose rm "$1"
 SUBDIR=$(basename "$(pwd)")
-docker rmi "${SUBDIR}-$1"
-docker compose up --detach "$1"
+podman rmi "${SUBDIR}-$1"
+podman compose up --detach "$1"
