@@ -9,7 +9,7 @@ $hash = strtolower($query);
 try{
 	$results = $this->client->get([
 		'index' => 'torrents',
-		'type' => 'hash',
+		// 'type' => 'hash',
 		'id' => $hash
 	]);
 	$torrents = [$results];

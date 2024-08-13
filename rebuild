@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+CONTAINER="${1^^}"
+
+if [ "$CONTAINER" == "" ] || [ "$CONTAINER" == "-H" ] || [ "$CONTAINER" == "--HELP" ]; then
+    echo "Rebuild and restart a container defined in a docker-compose.yaml file:" 
+    echo "   rebuild scraper"
+    echo "   rebuild www"
+    exit
+fi
+
+docker compose down "$1"
+docker compose rm "$1"
+SUBDIR=$(basename "$(pwd)")
+docker rmi "${SUBDIR}-$1"
+docker compose up --detach "$1"

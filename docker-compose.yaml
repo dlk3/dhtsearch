@@ -11,7 +11,7 @@ services:
     volumes:
       - type: bind
         source: ./alphareign_docker/config/index.js
-        target: /scraper/config/index.js"
+        target: /scraper/config/index.js
 
   www:
     container_name: www

@@ -4,7 +4,7 @@ $query = trim($this->params->query);
 
 $doc = [];
 $doc['index'] = 'torrents';
-$doc['type'] = 'hash';
+// $doc['type'] = 'hash';
 $doc['size'] = $limit;
 $doc['from'] = $from;
 $doc['body'] = [];

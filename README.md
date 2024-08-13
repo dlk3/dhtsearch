@@ -24,7 +24,12 @@ Based on the [AlphaReign project](https://github.com/AlphaReign) by [William Pre
 
 #### scraper Container
 
-The `alphareign_docker/conf/index.js` file configures all three of the of the nodejs apps that run within this container.  This file should not need any changes during Docker deployment but is available for tweaking.
+The `alphareign_docker/conf/index.js` file configures all three of the of the nodejs apps that run within this container.  This file should not need any changes during Docker deployment but is available for runtime tweaking.
+
+PM2 commands can be used to control the apps:
+
+    docker exec -it scraper pm2 status
+    docker exec -it scraper pm2 restart <scraper|loader|cleaner|all>
 
 #### www Container
 

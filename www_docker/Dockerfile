@@ -6,6 +6,9 @@ RUN dnf -y update && dnf -y install httpd mod_ssl php-fpm php-mysqlnd php-pdo ph
 #  Put my tracker discovery tools in here
 COPY ./tools/* /usr/local/bin/
 
+#  Copy in the web site code.
+COPY ./html/ /var/www/html/
+
 #  Modify php.ini
 #  Write PHP messages to the console
 RUN sed -i 's/^;error_log = syslog$/error_log = \/dev\/stderr/' "/etc/php.ini"
