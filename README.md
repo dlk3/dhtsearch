@@ -41,7 +41,7 @@ PM2 commands can be used to control the apps, i.e., restart them after configura
 
 #### www Container
 
-When you run the container for the first time be sure `define('INVITE_ONLY', false)` is set in `www_docker/html/index.php` so that you can register an ID for yourself.  In this mode anyone can register and use the web site.  If you later want to make the web site available by invitation only, then change this variable to true.  I'd also point out the `define('iREQUEST_LOGIN', true)` setting found here.  This can be set to false to make the web site totally open, i.e., available without requiring registration and login, if that's what you prefer.
+When you run the container for the first time be sure `define('INVITE_ONLY', false)` is set in `www_docker/html/index.php` so that you can register an ID for yourself.  In this mode anyone can register and use the web site.  If you later want to make the web site available by invitation only, then change this variable to true.  I'd also point out the `define('REQUEST_LOGIN', true)` setting found here.  This can be set to false to make the web site totally open, i.e., available without requiring registration and login, if that's what you prefer.
 
 The container needs to be configured to set the web site host name properly, in multiple locations.  SSL certificates need to be obtained for the web server and deployed.  I use LetsEncrypt.
 
