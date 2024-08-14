@@ -1,5 +1,8 @@
 FROM fedora:latest
 
+EXPOSE 80
+EXPOSE 443
+
 #  Update to latest and install additional softare packages
 RUN dnf -y update && dnf -y install httpd mod_ssl php-fpm php-mysqlnd php-pdo php-cli composer p7zip zip unzip procps-ng less && dnf clean all
 

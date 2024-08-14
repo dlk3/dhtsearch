@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+HOSTNAME="dhtsearch.domain.com"
+CODE_DIR="/home/someuser/src/dhtsearch"
+
+MD5=$(md5sum /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem)
+
+certbot renew -n
+
+if [ "$MD5" != "$(md5sum /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem)" ]; then
+   cp -v "/etc/letsencrypt/live/${HOSTNAME}/fullchain.pem" "/etc/letsencrypt/live/${HOSTNAME}/privkey.pem" "${CODE_DIR}/www_docker/certs/"
+   podman exec -it www httpd -k restart
+fi

@@ -1,0 +1,14 @@
+[Unit]
+Description=DHTSearch
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/home/dlk/src/dhtsearch
+ExecStart=podman compose up -d
+ExecStop=podman compose down
+
+[Install]
+WantedBy=multi-user.target

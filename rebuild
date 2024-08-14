@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+#  A development tool
+
 CONTAINER="${1^^}"
 
 if [ "$CONTAINER" == "" ] || [ "$CONTAINER" == "-H" ] || [ "$CONTAINER" == "--HELP" ]; then
@@ -9,8 +11,8 @@ if [ "$CONTAINER" == "" ] || [ "$CONTAINER" == "-H" ] || [ "$CONTAINER" == "--HE
     exit
 fi
 
-podman compose down "$1"
-podman compose rm "$1"
+sudo podman compose down "$1"
+sudo podman compose rm "$1"
 SUBDIR=$(basename "$(pwd)")
-podman rmi "${SUBDIR}-$1"
-podman compose up --detach "$1"
+sudo podman rmi "${SUBDIR}-$1"
+sudo podman compose up --detach "$1"

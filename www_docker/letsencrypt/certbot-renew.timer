@@ -1,0 +1,9 @@
+[Unit]
+Description=renewing my LetsEncrypt certificates
+
+[Timer]
+OnBootSec=10 minutes
+OnUnitActiveSec=12 hours
+
+[Install]
+WantedBy=timers.target

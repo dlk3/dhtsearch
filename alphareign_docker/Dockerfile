@@ -1,5 +1,7 @@
 FROM node:16.13.1-alpine
 
+EXPOSE 6881/udp
+
 ADD . /scraper
 WORKDIR /scraper
 

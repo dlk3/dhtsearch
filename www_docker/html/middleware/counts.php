@@ -9,7 +9,8 @@ $app->add(function ($request, $response, $next) {
         $this->view->count = explode('|', $counts)[0];
         $time = explode('|', $counts)[1];
         if($this->params->refresh == 'counts' || $time + 60 * 60 < time()){
-            $count = $this->client->count(['index' => 'torrents', 'type' => 'hash']);
+            //$count = $this->client->count(['index' => 'torrents', 'type' => 'hash']);
+            $count = $this->client->count(['index' => 'torrents']);
             $count = number_format($count['count']);
             $this->view->count = $count;
             file_put_contents('counts.txt', $count . '|' . time());

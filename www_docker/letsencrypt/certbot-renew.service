@@ -1,0 +1,6 @@
+[Unit]
+Description=renewing my LetsEncrypt certificates
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/certbot-renew
