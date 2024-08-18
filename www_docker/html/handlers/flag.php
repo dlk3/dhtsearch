@@ -20,7 +20,7 @@ $flags = R::count('flag', 'infohash = ?', [$args['infohash']]);
 
 $params = [
 	'index' => 'torrents',
-	'type' => 'hash',
+	// 'type' => 'hash',
 	'id' => $args['infohash'],
 	'body' => [
 		'doc' => [

@@ -13,7 +13,7 @@ $infohash = $args['infohash'];
 $this->view->infohash = $infohash;
 
 try{
-	$torrent = $this->client->get(['index' => 'torrents', 'type' => 'hash', 'id' => $infohash]);
+	$torrent = $this->client->get(['index' => 'torrents', 'id' => $infohash]);
 }catch(Exception $error){
 	return $this->view->redirect($response, $redirect);
 	exit();

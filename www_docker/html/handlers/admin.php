@@ -6,7 +6,7 @@ if(!isset($this->user) || !$this->user->isAdmin){
 
 $doc = [];
 $doc['index'] = 'torrents';
-$doc['type'] = 'hash';
+//$doc['type'] = 'hash';
 $doc['size'] = 500;
 $doc['from'] = 0;
 $doc['body'] = [];

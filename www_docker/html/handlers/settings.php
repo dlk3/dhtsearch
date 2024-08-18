@@ -70,7 +70,7 @@ if($path == 'counts'){
 	include(ROOT . '/handlers/counts.php');
 }
 
-$counts = R::getAll('SELECT COUNT(*) AS count FROM `user` WHERE user_id = ' . $this->user->id);
+$counts = R::getAll('SELECT COUNT(*) AS count FROM `user` WHERE id = ' . $this->user->id);
 $this->view->invites = number_format($counts[0]['count']);
 
 $this->view->user = $this->user->export();
