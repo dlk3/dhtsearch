@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+
+#  A monitoring script for nrpe, the Nagios Remote Plugin Executor.  It checks the
+#  health of all of the components of the DHTSearch system.
+
+#  URL for the DHTSearch web server
+url = 'https://dhtsearch.domain.com'
+
+#  List of names of the Podman containers
+containers = ['elasticsearch', 'mariadb', 'scraper', 'www']
+
+import subprocess
+import json
+import requests
+from lxml import html
+import traceback
+
+error_msg = ''
+error_rc = 0
+status_msg = ''
+perf_msg = ''
+
+try:
+    proc = subprocess.run('sudo podman ps --format=json --all', shell=True, capture_output=True)
+    if proc.returncode != 0:
+        print('Unable to execute podman ps command: {}'.format(proc.stderr))
+        exit(3)
+    else:
+        #  Are the containers we care about in "Exited" status?
+        results = json.loads(proc.stdout)
+        down = []
+        not_found = list(containers)
+        for container in containers:
+            for item in results:
+                if item['Exited'] and item['Names'][0] in containers:
+                    down.append(item['Names'][0])
+                else:
+                    if item['Names'][0] in not_found:
+                        not_found.remove(item['Names'][0])
+        if len(down) > 0:
+            error_msg = '{} containers have exited.'.format(', '.join(down))
+            error_rc = 2
+        if len(not_found) > 0:
+            if len(error_msg) > 0:
+                error_msg = '{} '.format(error_msg)
+            error_msg = '{}{} containers do not exist.'.format(error_msg, ', '.join(not_found))
+            error_rc = 2
+        if len(error_msg) == 0:
+            status_msg = '{} containers running.'.format(', '.join(containers))
+
+        #  Does elasticsearch respond and how many documents does it have in the index?
+        proc = subprocess.run('sudo podman exec -it elasticsearch curl http://localhost:9200/torrents/_count', shell=True, capture_output=True)
+        if proc.returncode != 0:
+            if len(error_msg) > 0:
+                error_msg = '{} '.format(error_msg)
+            error_msg = '{}Elasticsearch did not respond properly to count query: {}'.format(proc.stderr)
+            error_rc = 2
+        else:
+            results = json.loads(proc.stdout)
+            perf_msg = '{} documents indexed.'.format(results['count'])
+
+        #  Does the web site respond?
+        results = requests.get('{}/api?limit=5&sort=created&type=video'.format(url))
+        if results.status_code == 200:
+            tree = html.fromstring(results.content)
+            items = tree.xpath('//channel/item')
+            if len(items) == 5:
+                if len(status_msg) > 0:
+                    status_msg = '{} '.format(status_msg)
+                status_msg = '{}Web server responded as expected.'.format(status_msg)
+            else:
+                if len(error_msg) > 0:
+                    error_msg = '{} '.format(error_msg)
+                error_msg = '{}Web server did respond but did not return 5 items as expected.'.format(error_msg)
+                if error_rc < 1:
+                    error_rc = 1
+        else:
+            if len(error_msg) > 0:
+                error_msg = '{} '.format(error_msg)
+            error_msg = '{}Web server not responding.  Status code = {}'.format(error_msg, results.status_code)
+            error_rc = 2
+
+        if error_rc > 0:
+            print(error_msg)
+            exit(error_rc)
+        else:
+            if len(perf_msg) > 0:
+                status_msg = '{}|{}'.format(status_msg, perf_msg)
+            print(status_msg)
+            exit(0)
+except Exception:
+    print(traceback.format_exc())
+    exit(3)
