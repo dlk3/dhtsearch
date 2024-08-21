@@ -36,6 +36,9 @@ services:
       - type: bind
         source: ./www_docker/conf/ssl.conf
         target: /etc/httpd/conf.d/ssl.conf
+      - type: bind
+        source: ./www_docker/logs/
+        target: /var/log/httpd/
 
   mariadb:
     container_name: mariadb
