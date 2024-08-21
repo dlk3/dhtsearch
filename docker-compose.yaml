@@ -39,6 +39,9 @@ services:
       - type: bind
         source: ./www_docker/logs/
         target: /var/log/httpd/
+      - type: bind
+        source: ./www_docker/logs/php-fpm/
+        target: /var/log/php-fpm/
 
   mariadb:
     container_name: mariadb
