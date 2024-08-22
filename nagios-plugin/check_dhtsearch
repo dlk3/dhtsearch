@@ -38,7 +38,7 @@ try:
                     if item['Names'][0] in not_found:
                         not_found.remove(item['Names'][0])
         if len(down) > 0:
-            error_msg = '{} containers have exited.'.format(', '.join(down))
+            error_msg = '{} containers are not running.'.format(', '.join(down))
             error_rc = 2
         if len(not_found) > 0:
             if len(error_msg) > 0:
@@ -46,7 +46,7 @@ try:
             error_msg = '{}{} containers do not exist.'.format(error_msg, ', '.join(not_found))
             error_rc = 2
         if len(error_msg) == 0:
-            status_msg = '{} containers running.'.format(', '.join(containers))
+            status_msg = '{} containers are running.'.format(', '.join(containers))
 
         #  Does elasticsearch respond and how many documents does it have in the index?
         proc = subprocess.run('sudo podman exec -it elasticsearch curl http://localhost:9200/torrents/_count', shell=True, capture_output=True)
@@ -57,7 +57,7 @@ try:
             error_rc = 2
         else:
             results = json.loads(proc.stdout)
-            perf_msg = '{} documents indexed.'.format(results['count'])
+            perf_msg = '{} torrents indexed.'.format(results['count'])
 
         #  Does the web site respond?
         results = requests.get('{}/api?limit=5&sort=created&type=video'.format(url))
@@ -67,11 +67,11 @@ try:
             if len(items) == 5:
                 if len(status_msg) > 0:
                     status_msg = '{} '.format(status_msg)
-                status_msg = '{}Web server responded as expected.'.format(status_msg)
+                status_msg = '{}Web server responding as expected.'.format(status_msg)
             else:
                 if len(error_msg) > 0:
                     error_msg = '{} '.format(error_msg)
-                error_msg = '{}Web server did respond but did not return 5 items as expected.'.format(error_msg)
+                error_msg = '{}Web server responded but did not return 5 items as expected.'.format(error_msg)
                 if error_rc < 1:
                     error_rc = 1
         else:

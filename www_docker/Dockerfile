@@ -6,6 +6,9 @@ EXPOSE 443
 #  Update to latest and install additional softare packages
 RUN dnf -y update && dnf -y install httpd mod_ssl php-fpm php-mysqlnd php-pdo php-cli composer p7zip zip unzip procps-ng less mariadb && dnf clean all
 
+#  Set the timezone so that container's logs use same timezone as the host
+RUN ln -sf /usr/share/zoneinfo/EST5EDT /etc/localtime
+
 #  Create a client profile to make it easier to run the mysql client on this machine for debugging purposes
 COPY --chown=0:0 --chmod=640 ./my.cnf /root/.my.cnf
 
@@ -21,7 +24,7 @@ COPY ./html/ /var/www/html/
 #  Change logging options to include PHP's warning messages on deprecations
 #RUN sed -i 's/^error_reporting = .*$/error_reporting = E_ALL \& ~E_STRICT/' "/etc/php.ini"
 
-VOLUME ["/var/www/html/", "/etc/letsencrypt/", "/etc/httpd/conf.d/virtualhost.conf", "/etc/httpd/conf.d/ssl.conf"]
+VOLUME ["/etc/letsencrypt/", "/etc/httpd/conf.d/virtualhost.conf", "/etc/httpd/conf.d/ssl.conf"]
 VOLUME ["/var/log/httpd/", "/var/log/php-fpm/"]
 
 #  Install the startup script
