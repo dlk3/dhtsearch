@@ -24,9 +24,6 @@ COPY ./html/ /var/www/html/
 #  Change logging options to include PHP's warning messages on deprecations
 #RUN sed -i 's/^error_reporting = .*$/error_reporting = E_ALL \& ~E_STRICT/' "/etc/php.ini"
 
-VOLUME ["/etc/letsencrypt/", "/etc/httpd/conf.d/virtualhost.conf", "/etc/httpd/conf.d/ssl.conf"]
-VOLUME ["/var/log/httpd/", "/var/log/php-fpm/"]
-
 #  Install the startup script
 COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
 CMD ["/usr/local/bin/entrypoint.sh"]
