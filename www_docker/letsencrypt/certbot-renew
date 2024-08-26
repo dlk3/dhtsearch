@@ -1,13 +1,18 @@
 #!/usr/bin/env sh
 
-HOSTNAME="dhtsearch.domain.com"
-CODE_DIR="/home/someuser/src/dhtsearch"
-
-MD5=$(md5sum /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem)
+SERVERS=("dhtsearch.daveking.com" "music.daveking.com" "radio.daveking.co.nz" "search.daveking.co.nz")
+CODE_DIR="/home/dlk/src/dhtsearch"
 
 certbot renew -n
 
-if [ "$MD5" != "$(md5sum /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem)" ]; then
-   cp -v "/etc/letsencrypt/live/${HOSTNAME}/fullchain.pem" "/etc/letsencrypt/live/${HOSTNAME}/privkey.pem" "${CODE_DIR}/www_docker/certs/"
+RESTART_REQUIRED=1
+for SERVER in ${SERVERS[@]}; do
+   if [ "$(md5sum ${CODE_DIR}/www_docker/certs/${SERVER%%.*}/fullchain.pem | awk '{print $1}')" != "$(md5sum /etc/letsencrypt/live/${SERVER}/fullchain.pem | awk '{print $1}')" ]; then
+      cp -v "/etc/letsencrypt/live/${SERVER}/fullchain.pem" "/etc/letsencrypt/live/${SERVER}/privkey.pem" "${CODE_DIR}/www_docker/certs/${SERVER%%.*}/"
+      RESTART_REQUIRED=0
+   fi
+done
+
+if [ $RESTART_REQUIRED -eq 0 ]; then
    podman exec -it www httpd -k restart
 fi
