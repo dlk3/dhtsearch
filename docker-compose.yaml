@@ -12,6 +12,11 @@ services:
       - type: bind
         source: ./alphareign_docker/config/index.js
         target: /scraper/config/index.js
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: 1
 
   www:
     container_name: www
@@ -33,6 +38,9 @@ services:
       - type: bind
         source: ./www_docker/conf/virtualhost.conf
         target: /etc/httpd/conf.d/virtualhost.conf
+      - type: bind
+        source: ./www_docker/conf/othersites.conf
+        target: /etc/httpd/conf.d/othersites.conf
       - type: bind
         source: ./www_docker/conf/ssl.conf
         target: /etc/httpd/conf.d/ssl.conf
